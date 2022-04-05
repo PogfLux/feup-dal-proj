@@ -1,4 +1,4 @@
-#include "../include/trucks.h"
+#include "../include/Truck.h"
 
 Truck::Truck() {
     this->max_volume = 0;

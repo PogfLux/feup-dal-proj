@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Truck {
 
 private:
@@ -12,4 +14,8 @@ public:
     unsigned int get_max_weight();
     unsigned int get_cost();
 
+    friend std::ostream& operator << (std::ostream& out, const Truck& truck) {
+        out << truck.max_volume << ' ' << truck.max_weight << ' ' << truck.transportation_cost;
+        return out;
+    }
 };

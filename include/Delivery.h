@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Delivery {
 
 private:
@@ -14,4 +16,10 @@ public:
     unsigned int get_reward() const;
     unsigned int get_duration() const;
 
+    friend std::ostream& operator << (std::ostream& out, const Delivery& delivery) {
+
+        out << delivery.volume << ' ' << delivery.weight << ' ' << delivery.reward << ' ' << delivery.expected_duration;
+
+        return out;
+    }
 };
