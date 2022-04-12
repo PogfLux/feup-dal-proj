@@ -6,6 +6,9 @@
 #include <limits>
 
 #define MAX_CHARS_IGNORE std::numeric_limits <std::streamsize>::max()
+
+class Exit{};
+
 /**
  * @brief Clears the screen
  *
@@ -26,3 +29,5 @@ void clearInput();
 void waitForEnter(std::string prompt = "Press ENTER to continue...");
 
 std::vector<std::string> split(std::string str, char sep);
+
+void normalizeInput(std::string &input);

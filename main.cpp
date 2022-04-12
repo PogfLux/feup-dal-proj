@@ -1,11 +1,20 @@
 #include <iostream>
-#include "include/Company.h"
+#include "include/Menu.h"
 
 int main() {
 
-    /* for testing purposes */
+	Company company;
+	UserInterface ui(&company);
 
-    Company company;
+	try {
+		while (true) {
+			ui.show();
+		}
+	} catch (Exit) {
+		std::cout << "Shutting down..." << std::endl;
+	}
+
+    /* for testing purposes */
 
     std::cout << company.get_garage_size() << '\n';
 
