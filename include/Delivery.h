@@ -22,4 +22,8 @@ public:
 
         return out;
     }
+
+	bool operator <(const Delivery& d) const {
+		return get_weight() > d.get_weight() || get_volume() > d.get_volume();
+	}
 };

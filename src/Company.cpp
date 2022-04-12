@@ -34,3 +34,11 @@ void Company::add_truck(Truck& truck) {
 void Company::read_deliveries() {
     std::ifstream f{DELIVERIES_PATH};
 }
+
+std::vector<Truck> *Company::get_trucks() {
+	return &garage.get_trucks();
+}
+
+std::vector<Delivery> *Company::get_deliveries() {
+	return &warehouse.get_deliveries();
+}

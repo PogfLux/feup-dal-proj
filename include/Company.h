@@ -13,6 +13,8 @@ private:
 public:
     Company();
 
+	std::vector<Truck>* get_trucks();
+	std::vector<Delivery>* get_deliveries();
     Truck& get_truck(int index);
     Delivery& get_delivery(int index);
     int get_warehouse_size();
