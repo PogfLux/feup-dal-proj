@@ -12,14 +12,14 @@ Truck::Truck(unsigned int max_volume, unsigned int max_weight, unsigned int tran
     this->transportation_cost = transportation_cost;
 }
 
-unsigned int Truck::get_max_volume() {
+unsigned int Truck::get_max_volume() const{
     return this->max_volume;
 }
 
-unsigned int Truck::get_max_weight() {
+unsigned int Truck::get_max_weight() const{
     return this->max_weight;
 }
 
-unsigned int Truck::get_cost() {
+unsigned int Truck::get_cost() const{
     return this->transportation_cost;
 }

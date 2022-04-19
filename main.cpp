@@ -14,7 +14,8 @@ int main() {
 		std::cout << "Shutting down..." << std::endl;
 	}
 
-    /* for testing purposes */
+    /*
+    // for testing purposes
 
     std::cout << company.get_garage_size() << '\n';
 
@@ -29,6 +30,8 @@ int main() {
     for (int i = 0; i < 10; i++) {
         std::cout << company.get_delivery(i) << '\n';
     }
+
+    */
 
     return 0;
 }

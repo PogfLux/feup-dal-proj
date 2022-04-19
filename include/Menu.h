@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "Company.h"
 
+#include <algorithm>
 #include <limits>
 #include <climits>
 
