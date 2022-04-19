@@ -43,9 +43,11 @@ std::vector<Delivery> *Company::get_deliveries() {
 	return &warehouse.get_deliveries();
 }
 
-std::pair<int, int> Company::bin_packing(OPTIMIZATION opt) {
+std::tuple<int, int, double> Company::bin_packing(OPTIMIZATION opt) {
     std::vector<Delivery> deliveries = *get_deliveries();
     std::vector<Truck> trucks = *get_trucks();
+
+    auto start = std::chrono::system_clock::now();
     switch (opt) {
         case WEIGHT:
             std::sort(deliveries.begin(), deliveries.end(), [](Delivery &a, Delivery &b){
@@ -96,11 +98,10 @@ std::pair<int, int> Company::bin_packing(OPTIMIZATION opt) {
                 break;
             }
         }
-
-        if (!found) {
-            break;
-        }
     }
+
+    auto end = std::chrono::system_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end-start);
 
     for (auto truck: remaining) {
         if (truck.first != 0 && truck.second != 0) {
@@ -108,5 +109,5 @@ std::pair<int, int> Company::bin_packing(OPTIMIZATION opt) {
         }
     }
 
-    return std::make_pair(num_trucks, delivered);
+    return {num_trucks, delivered, time.count()};
 }

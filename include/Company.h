@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <memory>
+#include <chrono>
 
 class Company;
 
@@ -33,5 +34,5 @@ public:
     void read_trucks();
     void read_deliveries();
 
-    std::pair<int, int> bin_packing(OPTIMIZATION opt);
+    std::tuple<int, int, double> bin_packing(OPTIMIZATION opt);
 };

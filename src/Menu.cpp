@@ -123,7 +123,7 @@ void UserInterface::mainMenu() {
 void UserInterface::courierMenu() {
 
     clearScreen();
-    std::pair<int, int> res;
+    std::tuple<int, int, double> res;
 
     std::cout << "Optimizing couriers by:\n\n"
                  "1. Weight\n"
@@ -150,14 +150,14 @@ void UserInterface::courierMenu() {
             errorMessage = "Invalid option...\n";
     }
 
-    clearScreen();
-	if (res.second != company->get_warehouse_size()) {
-		std::cout << "Not all deliveries will be done today! (" << res.second << "/" << company->get_warehouse_size() << ")\n";
+	if (std::get<1>(res) != company->get_warehouse_size()) {
+		std::cout << "Not all deliveries will be done today! (" << std::get<1>(res) << "/" << company->get_warehouse_size() << ")\n";
 	} else {
 		std::cout << "All deliveries will be done today!\n";
 	}
 
-	std::cout << "Number of trucks used: " << res.first << std::endl;
+	std::cout << "Number of trucks used: " << std::get<0>(res) << "\n";
+    std::cout << "Finished in: " << std::get<2>(res) << "ms" << std::endl;
 	currentMenu = MAIN_MENU;
 }
 
