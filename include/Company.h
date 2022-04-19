@@ -4,6 +4,14 @@
 #include <queue>
 #include <memory>
 
+class Company;
+
+enum OPTIMIZATION {
+    WEIGHT,
+    VOLUME,
+    BOTH
+};
+
 class Company {
 
 private:
@@ -24,4 +32,6 @@ public:
 
     void read_trucks();
     void read_deliveries();
+
+    std::pair<int, int> bin_packing(OPTIMIZATION opt);
 };

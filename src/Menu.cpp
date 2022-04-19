@@ -121,54 +121,41 @@ void UserInterface::mainMenu() {
 }
 
 void UserInterface::courierMenu() {
-	std::vector<Delivery> deliveries = *company->get_deliveries();
 
-	std::sort(deliveries.begin(), deliveries.end(), [](Delivery &a, Delivery &b){
-		return a.get_weight() > b.get_weight() || a.get_volume() > b.get_volume();
-	});
+    std::pair<int, int> res;
 
-	unsigned int num_trucks = 0, delivered = 0;
-	std::vector<std::pair<int, int>> remaining; // weight, volume
+    std::cout << "Optimizing couriers by:\n\n"
+                 "1. Weight\n"
+                 "2. Volume\n"
+                 "3. Both (ratio: weight/volume)\n"
+                 "0. Back\n" << std::flush;
 
-	for (auto truck: *company->get_trucks()) {
-		remaining.push_back(std::make_pair(0, 0));
-	}
+    unsigned option = getUnsignedInput("Please insert option: ");
 
-	for (int i{0}; i < company->get_warehouse_size(); i++) {
-		bool found = false;
+    switch (option) {
+        case 0:
+            currentMenu = COURIER_MENU;
+            break;
+        case 1:
+            res = company->bin_packing(WEIGHT);
+            break;
+        case 2:
+            res = company->bin_packing(VOLUME);
+            break;
+        case 3:
+            res = company->bin_packing(BOTH);
+            break;
+        default:
+            errorMessage = "Invalid option...\n";
+    }
 
-		for (int j{0}; j < company->get_garage_size(); j++) {
-			int rem_truck_wei = (company->get_truck(j).get_max_weight() + remaining.at(j).first) - deliveries.at(i).get_weight();
-			int rem_truck_vol = (company->get_truck(j).get_max_volume() + remaining.at(j).second) - deliveries.at(i).get_volume();
-			if (rem_truck_wei >= 0 && rem_truck_vol >= 0) {
-				remaining.at(j).first -= company->get_delivery(i).get_weight();
-				remaining.at(j).second -= company->get_delivery(i).get_volume();
-
-				found = true;
-				delivered++;
-				break;
-			}
-		}
-
-		if (!found) {
-			break;
-		}
-	}
-
-	for (auto truck: remaining) {
-		if (truck.first != 0 && truck.second != 0) {
-			num_trucks++;
-		}
-	}
-
-
-	if (delivered != company->get_warehouse_size()) {
-		std::cout << "Not all deliveries will be done today! (" << delivered << "/" << company->get_warehouse_size() << ")\n";
+	if (res.second != company->get_warehouse_size()) {
+		std::cout << "Not all deliveries will be done today! (" << res.second << "/" << company->get_warehouse_size() << ")\n";
 	} else {
 		std::cout << "All deliveries will be done today!\n";
 	}
 
-	std::cout << "Number of trucks used: " << num_trucks << std::endl;
+	std::cout << "Number of trucks used: " << res.first << std::endl;
 	currentMenu = MAIN_MENU;
 }
 
