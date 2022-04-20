@@ -38,6 +38,8 @@ public:
      * @brief reads the file with information concerning the trucks, creating
      *        Truck objects and storing them in the trucks vector, with the
      *        corresponding information
+     *
+     * @param path path to the file with the trucks dataset to be loaded
      */
-    void read_trucks();
+    void read_trucks(std::string path);
 };

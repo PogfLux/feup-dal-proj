@@ -36,6 +36,11 @@ enum Menu {
 	EXPRESS_MENU,
 
     /**
+     * @brief shows a menu with options to reload the company's data
+     */
+    RELOAD_MENU,
+
+    /**
      * @brief exits the program
      */
 	EXIT
@@ -126,6 +131,8 @@ public:
      * @brief displays the optimizations of the express deliveries
      */
 	void expressMenu();
+
+    void reloadMenu();
 };
 
 

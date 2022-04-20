@@ -28,6 +28,26 @@ enum OPTIMIZATION {
 };
 
 /**
+ * @brief possible types of company datasets
+ */
+enum CompanyTypes {
+    /**
+     * @brief the default dataset (balanced)
+     */
+    DEFAULT,
+
+    /**
+     * @brief a dataset with a bigger delivery amount than the default (skewed for deliveries)
+     */
+    DELIVERIES,
+
+    /**
+     * @brief a dataset with a smaller delivery amount than the default (skewed for trucks)
+     */
+    TRUCKS
+};
+
+/**
  * @brief the transportation company
  */
 class Company {
@@ -107,4 +127,11 @@ public:
      *         time taken to execute the algorithm
      */
     std::tuple<int, int, double> bin_packing(OPTIMIZATION opt);
+
+    /**
+     * @brief reloads the information according to the type of dataset to be loaded
+     *
+     * @param type the type of dataset to be loaded
+     */
+    void reload(CompanyTypes type);
 };

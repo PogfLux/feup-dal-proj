@@ -107,3 +107,17 @@ std::tuple<int, int, double> Company::bin_packing(OPTIMIZATION opt) {
 
     return {num_trucks, delivered, time.count()};
 }
+
+void Company::reload(CompanyTypes type) {
+    switch (type) {
+        case DEFAULT:
+            warehouse.read_deliveries(DEFAULT_DELIVERIES_PATH);
+            break;
+        case DELIVERIES:
+            warehouse.read_deliveries(DELIVERIES_DELIVERIES_PATH);
+            break;
+        case TRUCKS:
+            warehouse.read_deliveries(TRUCKS_DELIVERIES_PATH);
+            break;
+    }
+}

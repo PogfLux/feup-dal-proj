@@ -1,7 +1,7 @@
 #include "../include/Garage.h"
 
 Garage::Garage() {
-    read_trucks();
+    read_trucks(DEFAULT_TRUCKS_PATH);
 }
 
 std::vector<Truck>& Garage::get_trucks() {
@@ -12,8 +12,10 @@ Truck& Garage::get_truck(int index) {
     return this->trucks.at(index);
 }
 
-void Garage::read_trucks() {
-    std::ifstream f{TRUCKS_PATH};
+void Garage::read_trucks(std::string path) {
+    std::ifstream f{path};
+
+    if (!trucks.empty()) trucks.clear();
 
     while (!f.eof()) {
         std::string line;

@@ -37,6 +37,8 @@ public:
      * @brief reads the file with information concerning the deliveries, creating
      *        Delivery objects and storing them in the deliveries vector, with the
      *        corresponding information
+     *
+     * @param path path to the file with the deliveries dataset to be loaded
      */
-    void read_deliveries();
+    void read_deliveries(std::string path);
 };

@@ -59,19 +59,23 @@ void UserInterface::show() {
 		case EXPRESS_MENU:
 			expressMenu();
 			break;
+        case RELOAD_MENU:
+            reloadMenu();
+            break;
 		case EXIT:
 			throw Exit();
 	}
 }
 
 void UserInterface::mainMenu() {
-	std::cout << "COMPANY\n\n"
+	std::cout << "COMPANY THAT TRANSPORTS (CTT)\n\n"
 				 "1. Optimize couriers\n"
 				 "2. Optimize profit\n"
 				 "3. Optimize express deliveries\n"
-				 "0. Exit\n" << std::flush;
+                 "4. Reload Company\n"
+                 "0. Exit\n" << std::flush;
 
-	unsigned option = getUnsignedInput("Please insert option: ", 0, 3);
+	unsigned option = getUnsignedInput("Please insert option: ", 0, 4);
 
 	switch (option) {
 		case 0:
@@ -86,7 +90,11 @@ void UserInterface::mainMenu() {
 		case 3:
 			currentMenu = EXPRESS_MENU;
 			break;
-		default:
+        case 4:
+            currentMenu = RELOAD_MENU;
+            break;
+
+        default:
 			errorMessage = "Invalid option...\n";
 	}
 }
@@ -106,7 +114,7 @@ void UserInterface::courierMenu() {
 
     switch (option) {
         case 0:
-            currentMenu = COURIER_MENU;
+            currentMenu = MAIN_MENU;
             break;
         case 1:
             res = company->bin_packing(WEIGHT);
@@ -122,13 +130,17 @@ void UserInterface::courierMenu() {
     }
 
 	if (std::get<1>(res) != company->get_warehouse_size()) {
-		std::cout << "Not all deliveries will be done today! (" << std::get<1>(res) << "/" << company->get_warehouse_size() << ")\n";
+		std::cout << "Not all deliveries will be done today! (" << ((float) std::get<1>(res) / company->get_warehouse_size()) * 100 << "%)\n";
 	} else {
 		std::cout << "All deliveries will be done today!\n";
 	}
 
 	std::cout << "Number of trucks used: " << std::get<0>(res) << "\n";
     std::cout << "Finished in: " << std::get<2>(res) << "ms" << std::endl;
+
+    waitForEnter();
+    clearScreen();
+
 	currentMenu = MAIN_MENU;
 }
 
@@ -198,6 +210,39 @@ void UserInterface::profitMenu() {
 
 void UserInterface::expressMenu() {
 	// TODO: WRITE THE ALGORITHM
+    clearScreen();
+
+    currentMenu = MAIN_MENU;
+}
+
+void UserInterface::reloadMenu() {
+    clearScreen();
+
+    std::cout << "Reloading dataset to (# deliveries/# trucks):\n\n"
+                 "1. Default (450/50)\n"
+                 "2. Deliveries > Trucks (1350/50)\n"
+                 "3. Trucks > Deliveries (300/50)\n"
+                 "0. Back\n" << std::flush;
+
+    unsigned option = getUnsignedInput("Please insert option: ", 0, 3);
+
+    switch (option) {
+        case 0:
+            currentMenu = MAIN_MENU;
+            break;
+        case 1:
+            company->reload(DEFAULT);
+            break;
+        case 2:
+            company->reload(DELIVERIES);
+            break;
+        case 3:
+            company->reload(TRUCKS);
+            break;
+        default:
+            errorMessage = "Invalid option...\n";
+    }
+
     clearScreen();
 
     currentMenu = MAIN_MENU;

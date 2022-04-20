@@ -1,7 +1,7 @@
 #include "../include/Warehouse.h"
 
 Warehouse::Warehouse() {
-    read_deliveries();
+    read_deliveries(DEFAULT_DELIVERIES_PATH);
 }
 
 std::vector<Delivery>& Warehouse::get_deliveries() {
@@ -12,8 +12,10 @@ Delivery& Warehouse::get_delivery(int index) {
     return this->deliveries.at(index);
 }
 
-void Warehouse::read_deliveries() {
-    std::ifstream f{DELIVERIES_PATH};
+void Warehouse::read_deliveries(std::string path) {
+    std::ifstream f{path};
+
+    if (!deliveries.empty()) deliveries.clear();
 
     while (!f.eof()) {
         std::string line;
