@@ -3,7 +3,14 @@
 
 #include <string>
 
+/**
+ * @brief path to the file with the trucks information
+ */
 const std::string TRUCKS_PATH = "./resources/carrinhas.txt";
+
+/**
+ * @brief path to the file with the deliveries information
+ */
 const std::string DELIVERIES_PATH = "./resources/encomendas.txt";
 
 

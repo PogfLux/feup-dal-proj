@@ -31,10 +31,6 @@ void Company::add_truck(Truck& truck) {
     this->garage.get_trucks().push_back(truck);
 }
 
-void Company::read_deliveries() {
-    std::ifstream f{DELIVERIES_PATH};
-}
-
 std::vector<Truck> *Company::get_trucks() {
 	return &garage.get_trucks();
 }

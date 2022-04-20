@@ -20,26 +20,6 @@ unsigned long UserInterface::getUnsignedInput(std::string prompt, unsigned long 
 	return number;
 }
 
-double UserInterface::getDoubleInput(std::string prompt, double min, double max) {
-	std::string input;
-	double number;
-	bool done = false;
-
-	do {
-		input = getStringInput(prompt);
-
-		try {
-			number = stod(input);
-			done = true;
-		} catch (std::invalid_argument) {
-			errorMessage = "Invalid input!\n";
-			done = false;
-		}
-	} while (!done || !inRange(number, min, max));
-
-	return number;
-}
-
 std::string UserInterface::getStringInput(std::string prompt) {
 	std::cout << errorMessage << prompt;
 	errorMessage = "";
@@ -57,15 +37,6 @@ std::string UserInterface::getStringInput(std::string prompt) {
 
 bool UserInterface::inRange(unsigned long n, unsigned long min,
 							unsigned long max) {
-	bool b = (n <= max) && (n >= min);
-
-	if (!b)
-		errorMessage = "Value outside allowed range!\n";
-
-	return b;
-}
-
-bool UserInterface::inRange(double n, double min, double max) {
 	bool b = (n <= max) && (n >= min);
 
 	if (!b)
@@ -100,7 +71,7 @@ void UserInterface::mainMenu() {
 				 "3. Optimize express deliveries\n"
 				 "0. Exit\n" << std::flush;
 
-	unsigned option = getUnsignedInput("Please insert option: ");
+	unsigned option = getUnsignedInput("Please insert option: ", 0, 3);
 
 	switch (option) {
 		case 0:
@@ -131,7 +102,7 @@ void UserInterface::courierMenu() {
                  "3. Both (ratio: weight/volume)\n"
                  "0. Back\n" << std::flush;
 
-    unsigned option = getUnsignedInput("Please insert option: ");
+    unsigned option = getUnsignedInput("Please insert option: ", 0, 3);
 
     switch (option) {
         case 0:
