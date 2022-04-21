@@ -11,6 +11,7 @@ int main() {
 			ui.show();
 		}
 	} catch (Exit) {
+        clearScreen();
 		std::cout << "Shutting down..." << std::endl;
 	}
 

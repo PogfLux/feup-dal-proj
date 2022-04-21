@@ -108,6 +108,99 @@ std::tuple<int, int, double> Company::bin_packing(OPTIMIZATION opt) {
     return {num_trucks, delivered, time.count()};
 }
 
+std::tuple<int, int, double> Company::bin_packing_profit() {
+
+    auto start = std::chrono::system_clock::now();
+
+    std::vector<Truck> trucks = *this->get_trucks();
+    std::sort(trucks.begin(), trucks.end(), [] (const Truck& a, const Truck& b) {
+        return a.get_cost() < b.get_cost();
+    });
+
+    std::vector<Delivery> deliveries = *this->get_deliveries();
+    std::sort(deliveries.begin(), deliveries.end(), [] (const Delivery& a, const Delivery& b) {
+        return a.get_reward() > b.get_reward();
+    });
+
+    unsigned int num_trucks = 0, delivered = 0;
+    int profit = 0;
+
+    std::vector<std::pair<int, int>> remaining;
+
+    for (int i = 0; i < this->get_garage_size(); i++) {
+        remaining.push_back(std::make_pair(0, 0));
+    }
+
+    for (int i = 0; i < this->get_warehouse_size(); i++) {
+        bool found = false;
+
+        for (int j = 0; j < this->get_garage_size(); j++) {
+            int rem_truck_wei = (trucks.at(j).get_max_weight() + remaining.at(j).first) - deliveries.at(i).get_weight();
+            int rem_truck_vol = (trucks.at(j).get_max_volume() + remaining.at(j).second) - deliveries.at(i).get_volume();
+            bool isEmpty = (remaining.at(j).first == 0 && remaining.at(j).second == 0);
+
+            if (rem_truck_wei >= 0 && rem_truck_vol >= 0) {
+                remaining.at(j).first -= deliveries.at(i).get_weight();
+                remaining.at(j).second -= deliveries.at(i).get_volume();
+                int reward = deliveries.at(i).get_reward();
+                int tran_cost = trucks.at(j).get_cost();
+
+                profit += isEmpty ? reward - tran_cost : reward;
+
+                found = true;
+                delivered++;
+                break;
+            }
+
+        }
+    }
+
+    auto end = std::chrono::system_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end-start);
+
+    for (auto truck: remaining) {
+        if (truck.first != 0 && truck.second != 0) {
+            num_trucks++;
+        }
+    }
+
+    if (delivered != this->get_warehouse_size()) {
+        std::cout << "Not all deliveries will be done today! (" << delivered << '/' << this->get_warehouse_size() << ")\n";
+    } else {
+        std::cout << "All deliveries will be done today!\n";
+    }
+
+    return {num_trucks, profit, time.count()};
+}
+
+std::pair<int, double> Company::bin_packing_express() {
+
+    auto start = std::chrono::system_clock::now();
+
+    std::vector<Delivery> deliveries = *this->get_deliveries();
+    std::sort(deliveries.begin(), deliveries.end(), [](const Delivery& a, const Delivery& b) {
+        return a.get_duration() < b.get_duration();
+    });
+
+
+    unsigned int delivered = 0;
+    int time_limit = 8*60*60; // 8 hours between 9AM and 5PM (in seconds)
+
+    int i = 0;
+    while (time_limit > 0 && i < this->get_warehouse_size()) {
+            auto duration = deliveries.at(i).get_duration();
+            time_limit -= duration;
+            delivered++;
+            i++;
+    }
+
+    auto end = std::chrono::system_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end-start);
+
+    return std::make_pair(delivered, time.count());
+}
+
+
 void Company::reload(CompanyTypes type) {
     switch (type) {
         case DEFAULT:

@@ -129,6 +129,18 @@ public:
     std::tuple<int, int, double> bin_packing(OPTIMIZATION opt);
 
     /**
+     * @brief implementation of the bin packing algorithm, purposed for the maximum profit scenario
+     * @return std::tuple containing the number of trucks used, the profit made and time taken to execute, respectively
+     */
+    std::tuple<int, int, double> bin_packing_profit();
+
+    /**
+     * @brief implementation of the bin packing algorithm, purposed for the express deliveries scenario
+     * @return std::tuple containing deliveries made and time to execute, respectively
+     */
+    std::pair<int, double> bin_packing_express();
+
+    /**
      * @brief reloads the information according to the type of dataset to be loaded
      *
      * @param type the type of dataset to be loaded

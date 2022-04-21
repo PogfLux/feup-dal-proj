@@ -129,6 +129,8 @@ void UserInterface::courierMenu() {
             errorMessage = "Invalid option...\n";
     }
 
+    clearScreen();
+
 	if (std::get<1>(res) != company->get_warehouse_size()) {
 		std::cout << "Not all deliveries will be done today! (" << ((float) std::get<1>(res) / company->get_warehouse_size()) * 100 << "%)\n";
 	} else {
@@ -146,70 +148,36 @@ void UserInterface::courierMenu() {
 
 void UserInterface::profitMenu() {
     clearScreen();
-
-    std::vector<Truck> trucks = *company->get_trucks();
-    std::sort(trucks.begin(), trucks.end(), [] (const Truck& a, const Truck& b) {
-       return a.get_cost() < b.get_cost();
-    });
-
-    std::vector<Delivery> deliveries = *company->get_deliveries();
-    std::sort(deliveries.begin(), deliveries.end(), [] (const Delivery& a, const Delivery& b) {
-        return a.get_reward() > b.get_reward();
-    });
-
-    unsigned int num_trucks = 0, delivered = 0;
-    int profit = 0;
-
-    std::vector<std::pair<int, int>> remaining;
-
-    for (int i = 0; i < company->get_garage_size(); i++) {
-        remaining.push_back(std::make_pair(0, 0));
-    }
-
-    for (int i = 0; i < company->get_warehouse_size(); i++) {
-        bool found = false;
-
-        for (int j = 0; j < company->get_garage_size(); j++) {
-            int rem_truck_wei = (trucks.at(j).get_max_weight() + remaining.at(j).first) - deliveries.at(i).get_weight();
-            int rem_truck_vol = (trucks.at(j).get_max_volume() + remaining.at(j).second) - deliveries.at(i).get_volume();
-            bool isEmpty = (remaining.at(j).first == 0 && remaining.at(j).second == 0);
-
-            if (rem_truck_wei >= 0 && rem_truck_vol >= 0) {
-                remaining.at(j).first -= deliveries.at(i).get_weight();
-                remaining.at(j).second -= deliveries.at(i).get_volume();
-                int reward = deliveries.at(i).get_reward();
-                int tran_cost = trucks.at(j).get_cost();
-
-                profit += isEmpty ? reward - tran_cost : reward;
-
-                found = true;
-                delivered++;
-                break;
-            }
-
-        }
-    }
-
-    for (auto truck: remaining) {
-        if (truck.first != 0 && truck.second != 0) {
-            num_trucks++;
-        }
-    }
-
-    if (delivered != company->get_warehouse_size()) {
-        std::cout << "Not all deliveries will be done today! (" << delivered << '/' << company->get_warehouse_size() << ")\n";
-    } else {
-        std::cout << "All deliveries will be done today!\n";
-    }
+    auto results = company->bin_packing_profit();
+    int num_trucks = std::get<0>(results);
+    int profit = std::get<1>(results);
+    double time = std::get<2>(results);
 
     std::cout << "Number of trucks used: " << num_trucks << '\n';
     std::cout << "Profit made: " << profit << '\n';
+    std::cout << "Finished in: " << time << " ms" << '\n';
+
+    waitForEnter();
+    clearScreen();
 
     currentMenu = MAIN_MENU;
 }
 
 void UserInterface::expressMenu() {
-	// TODO: WRITE THE ALGORITHM
+    clearScreen();
+    auto results = company->bin_packing_express();
+    int delivered = std::get<0>(results);
+    double time = std::get<1>(results);
+
+    if (delivered != company->get_warehouse_size()) {
+        std::cout << "Not all deliveries will be done today! (" << ((float) delivered / company->get_warehouse_size()) * 100 << "%)\n";
+    } else {
+        std::cout << "All deliveries will be done today!\n";
+    }
+
+    std::cout << "Finished in: " << time << " ms" << '\n';
+
+    waitForEnter();
     clearScreen();
 
     currentMenu = MAIN_MENU;

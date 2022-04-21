@@ -30,6 +30,7 @@ void Warehouse::read_deliveries(std::string path) {
                                      std::stoul(parsedLine.at(1)),
                                      std::stoul(parsedLine.at(2)),
                                      std::stoul(parsedLine.at(3)));
+
         deliveries.push_back(delivery);
 
     }
